@@ -1,0 +1,19 @@
+{
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "[typescript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "editor.formatOnSave": true,
+    "files.eol": "\n",
+    "eslint.format.enable": true,
+    "i18n-ally.localesPaths": [
+      "src/i18n"
+    ],
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
+  
