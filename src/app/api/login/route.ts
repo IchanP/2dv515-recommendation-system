@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
   const correctPw = process.env.ADMIN_PW;
@@ -8,7 +9,14 @@ export async function POST(request: NextRequest) {
       { message: "Login successful" },
       { status: 200 },
     );
-    response.cookies.set("session", "loggedIn", {
+
+    const token = jwt.sign(
+      { userId: "admin" },
+      process.env.ADMIN_SESSION as string,
+      { expiresIn: "8h" },
+    );
+
+    response.cookies.set("session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 8, // 8 hours

@@ -1,17 +1,21 @@
 // app/dashboard/page.js
 import PregenButton from "@/components/admin/PregenButton";
 import { cookies, headers } from "next/headers";
-
+import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
   const cookieStore = cookies();
 
-  const session = cookieStore.get("session");
   const locale =
     headers().get("accept-language")?.split(",")[0].split("-")[0] || "en";
 
-  if (!session || session.value !== "loggedIn") {
+  const token = cookieStore.get("session")?.value;
+  try {
+    jwt.verify(token as string, process.env.SESSION_SECRET as string);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error: unknown) {
+    // Should probably use a logger here to log the error but w/e
     redirect(`/${locale}/admin`);
   }
 
