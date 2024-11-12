@@ -12,9 +12,10 @@ export default function DashboardPage() {
 
   const token = cookieStore.get("session")?.value;
   try {
-    jwt.verify(token as string, process.env.SESSION_SECRET as string);
+    jwt.verify(token as string, process.env.ADMIN_SESSION as string);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {
+    console.log(error);
     // Should probably use a logger here to log the error but w/e
     redirect(`/${locale}/admin`);
   }
