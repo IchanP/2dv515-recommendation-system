@@ -25,7 +25,11 @@ export class PregenFacade {
       );
     const transposedRatings = await this.transposer.transpose(userRatings);
     const similarities = this.calculateAllMovieSimilarities(transposedRatings);
-    console.log(similarities);
+    this.CSVWriter.writeCSV(
+      similarities,
+      publicPath + "/data/transposed/movie-similarities.csv",
+      ";",
+    );
   }
 
   private calculateAllMovieSimilarities(movieRatings: RatingsMap) {
