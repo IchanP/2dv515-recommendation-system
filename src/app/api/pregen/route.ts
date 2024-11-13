@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { CSVTransposer } from "@/services/CSVTransposer";
+import { PregenFacade } from "@/services/PregenFacade";
 
 export async function POST() {
   const cookieStore = cookies();
@@ -11,9 +11,9 @@ export async function POST() {
   try {
     jwt.verify(token as string, process.env.ADMIN_SESSION as string);
 
-    const transformer = new CSVTransposer();
+    const generator = new PregenFacade();
 
-    transformer.processFiles();
+    await generator.generateTable();
 
     // TODO Add in file path
     return NextResponse.json({
