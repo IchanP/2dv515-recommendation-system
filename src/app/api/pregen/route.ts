@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { CSVTransformer } from "@/services/CSVTransformer";
+import { CSVTransposer } from "@/services/CSVTransposer";
 
 export async function POST() {
   const cookieStore = cookies();
@@ -11,7 +11,7 @@ export async function POST() {
   try {
     jwt.verify(token as string, process.env.ADMIN_SESSION as string);
 
-    const transformer = new CSVTransformer();
+    const transformer = new CSVTransposer();
 
     transformer.processFiles();
 

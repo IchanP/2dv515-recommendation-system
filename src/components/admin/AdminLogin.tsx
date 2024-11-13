@@ -18,7 +18,6 @@ const AdminLogin = () => {
       },
       body: JSON.stringify({ password }),
     });
-    console.log(locale);
     if (response.ok) {
       router.push(`/${locale}/dashboard`);
     } else {
