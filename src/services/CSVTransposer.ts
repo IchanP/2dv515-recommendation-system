@@ -2,6 +2,7 @@ import { parse } from "csv-parse";
 import fs from "node:fs";
 import { finished } from "stream/promises";
 import path from "path";
+import { RatingsMap, euclidieanSimilarity } from "@/util";
 
 type UntransformedMovieSet = {
   MovieId: number;
@@ -20,10 +21,6 @@ type UntransformedUsers = {
   Name: string;
 };
 
-type MovieRatingsMap = {
-  [movieId: number]: { userId: number; rating: number }[];
-};
-
 /**
  * Transposes the dataset from the data located under /public/data into a
  */
@@ -31,7 +28,7 @@ export class CSVTransposer {
   movies: UntransformedMovieSet[] = [];
   userRatings: UntransformedRatings[] = [];
   users: UntransformedUsers[] = [];
-  movieRatings: MovieRatingsMap = {};
+  movieRatings: RatingsMap = {};
   /**
    * Transforms all the CSV files under the /public/data path
    * and outputs a similarity score CSV file for users.
@@ -50,7 +47,6 @@ export class CSVTransposer {
       publicPath + "/data/users.csv",
     );
     this.transpose(this.userRatings);
-    console.log(this.movieRatings);
   }
 
   private async transpose(ratings: UntransformedRatings[]) {
@@ -60,7 +56,7 @@ export class CSVTransposer {
         this.movieRatings[movieId] = [];
       }
       this.movieRatings[movieId].push({
-        userId: rating.UserId,
+        raterId: rating.UserId,
         rating: rating.Rating,
       });
     }
