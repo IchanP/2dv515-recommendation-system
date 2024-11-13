@@ -34,5 +34,5 @@ export function euclidieanSimilarity(
     return 0;
   }
 
-  return 1 / (1 * similarity);
+  return (1 / (1 + similarity)).toFixed(4);
 }

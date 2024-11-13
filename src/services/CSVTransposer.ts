@@ -47,6 +47,7 @@ export class CSVTransposer {
       publicPath + "/data/users.csv",
     );
     this.transpose(this.userRatings);
+    console.log(this.calculateAllMovieSimilarities(this.movieRatings));
   }
 
   private async transpose(ratings: UntransformedRatings[]) {
@@ -102,5 +103,37 @@ export class CSVTransposer {
       (recordObject as any)[header] = record[index];
     });
     return recordObject;
+  }
+
+  private calculateAllMovieSimilarities(movieRatings: RatingsMap) {
+    const movieIds = Object.keys(movieRatings);
+    // Turn it into an array of objects for easier handling
+    const similarities: {
+      movieA: string;
+      movieB: string;
+      similarity: string | number;
+    }[] = [];
+
+    // Quadratic growth since we loop over all the pairings.
+    for (let i = 0; i < movieIds.length; i++) {
+      for (let j = i + 1; j < movieIds.length; j++) {
+        const movieAId = movieIds[i];
+        const movieBId = movieIds[j];
+        const similarityScore = euclidieanSimilarity(
+          movieAId,
+          movieBId,
+          movieRatings,
+        );
+        similarities.push({
+          movieA: movieAId,
+          movieB: movieBId,
+          similarity: similarityScore,
+        });
+      }
+    }
+
+    return similarities.filter((element) => {
+      return element.similarity !== 0;
+    });
   }
 }
