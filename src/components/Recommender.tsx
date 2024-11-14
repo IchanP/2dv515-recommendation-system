@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import FormParagraph from "./FormParagraph";
+import DataTable from "./DataTable";
 
 export declare type User = {
   UserId: number;
@@ -15,6 +16,13 @@ const recommendationTypes: { itemBased: reccType; userBased: reccType } = {
   userBased: "user-based",
 };
 
+const headerTest = ["One", "Thirty-Six", "Fifty-Five"];
+const dataTest = [
+  ["Test One", "Test Two", "Test Three"],
+  ["Test Four", "Test Five", "Test Six"],
+  ["Test Seven", "Test Eight", "Test Nine"],
+];
+
 const Recommender = ({ users }: { users: User[] }) => {
   const [selectedUser, setSelectedUser] = useState(users[0].UserId.toString());
   const [reccType, setReccType] = useState<reccType>(
@@ -23,11 +31,19 @@ const Recommender = ({ users }: { users: User[] }) => {
   const [results, setResults] = useState("");
 
   // TODO might need state logic for grabbing the selector value.
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(selectedUser);
-    console.log(reccType);
-    console.log(results);
+    const response = await fetch(
+      reccType === recommendationTypes.itemBased
+        ? "/api/item-recommend"
+        : "/api/user-recommend",
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+    } else {
+      // Set an error message to display
+    }
   };
   return (
     <div>
@@ -70,6 +86,9 @@ const Recommender = ({ users }: { users: User[] }) => {
             Submit
           </button>
         </form>
+        <div className="flex flex-col items-center mt-5">
+          <DataTable headers={headerTest} data={dataTest} />
+        </div>
       </div>
     </div>
   );
