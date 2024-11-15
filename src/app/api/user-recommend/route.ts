@@ -7,12 +7,13 @@ export async function GET(request: NextRequest) {
     const user = searchParams.get("user");
     const nrOfResults = searchParams.get("results");
 
-    if (!user || !nrOfResults) throw new Error();
+    if (!user || !nrOfResults || !Number(user) || !Number(nrOfResults))
+      throw new Error();
 
     const recommender = new UserRecommend();
     const recommendations = await recommender.getRecommendations(
       user,
-      nrOfResults,
+      Number(nrOfResults),
     );
 
     return NextResponse.json({ data: recommendations }, { status: 200 });
