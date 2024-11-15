@@ -30,14 +30,23 @@ const Recommender = ({ users }: { users: User[] }) => {
   );
   const [results, setResults] = useState("");
 
-  // TODO might need state logic for grabbing the selector value.
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch(
+    if (results.length === 0) {
+      //TODO Display error
+      return;
+    }
+
+    const params = new URLSearchParams({
+      user: selectedUser,
+      results: results,
+    }).toString();
+
+    const endpoint =
       reccType === recommendationTypes.itemBased
         ? "/api/item-recommend"
-        : "/api/user-recommend",
-    );
+        : "/api/user-recommend";
+    const response = await fetch(`${endpoint}?${params}`);
     if (response.ok) {
       const data = await response.json();
       console.log(data.message);

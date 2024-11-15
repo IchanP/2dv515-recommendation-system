@@ -15,15 +15,17 @@ const DataTable = ({
     <>
       <table>
         <thead className="w-full">
-          {headers.map((header) => {
-            const background = backgroundRotator(i);
-            i++;
-            return (
-              <th key={header} className={background + " px-10 border-2"}>
-                {header}
-              </th>
-            );
-          })}
+          <tr>
+            {headers.map((header) => {
+              const background = backgroundRotator(i);
+              i++;
+              return (
+                <th key={header} className={background + " px-10 border-2"}>
+                  {header}
+                </th>
+              );
+            })}
+          </tr>
         </thead>
         <tbody>
           {data?.map((dataArray, index) => {
