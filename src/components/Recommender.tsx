@@ -16,12 +16,7 @@ const recommendationTypes: { itemBased: reccType; userBased: reccType } = {
   userBased: "user-based",
 };
 
-const headerTest = ["One", "Thirty-Six", "Fifty-Five"];
-const dataTest = [
-  ["Test One", "Test Two", "Test Three"],
-  ["Test Four", "Test Five", "Test Six"],
-  ["Test Seven", "Test Eight", "Test Nine"],
-];
+const headers = ["ID", "Title", "Score"];
 
 const Recommender = ({ users }: { users: User[] }) => {
   const [selectedUser, setSelectedUser] = useState(users[0].UserId.toString());
@@ -29,6 +24,9 @@ const Recommender = ({ users }: { users: User[] }) => {
     recommendationTypes.itemBased,
   );
   const [results, setResults] = useState("");
+  const [recommendations, setRecommendations] = useState<
+    Recommendation[] | null
+  >(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,9 +47,10 @@ const Recommender = ({ users }: { users: User[] }) => {
     const response = await fetch(`${endpoint}?${params}`);
     if (response.ok) {
       const data = await response.json();
-      console.log(data.message);
+      const foundRecommendations: Recommendation[] = data.data;
+      setRecommendations(foundRecommendations);
     } else {
-      // Set an error message to display
+      // TODO Set an error message to display
     }
   };
   return (
@@ -96,7 +95,9 @@ const Recommender = ({ users }: { users: User[] }) => {
           </button>
         </form>
         <div className="flex flex-col items-center mt-5">
-          <DataTable headers={headerTest} data={dataTest} />
+          {recommendations !== null && (
+            <DataTable headers={headers} data={recommendations} />
+          )}
         </div>
       </div>
     </div>

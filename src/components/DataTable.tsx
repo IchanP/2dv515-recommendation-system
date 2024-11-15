@@ -3,7 +3,7 @@ const DataTable = ({
   data,
 }: {
   headers: string[];
-  data?: Array<string[]>;
+  data: Array<object>;
 }) => {
   const backgroundRotator = (i: number) => {
     return i % 2 === 0
@@ -28,10 +28,10 @@ const DataTable = ({
           </tr>
         </thead>
         <tbody>
-          {data?.map((dataArray, index) => {
+          {data.map((object, index) => {
             return (
               <tr key={index}>
-                {dataArray.map((data, i) => {
+                {Object.values(object).map((data, i) => {
                   const background = backgroundRotator(i);
                   return (
                     <td key={i} className={`${background} px-10 border-2`}>

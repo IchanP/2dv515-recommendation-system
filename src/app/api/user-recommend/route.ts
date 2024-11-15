@@ -15,8 +15,6 @@ export async function GET(request: NextRequest) {
       user,
       Number(nrOfResults),
     );
-    console.log(recommendations);
-
     return NextResponse.json({ data: recommendations }, { status: 200 });
   } catch (e: unknown) {
     console.log(e); // Should go to logger really but whatever for this assignment

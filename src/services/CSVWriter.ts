@@ -19,7 +19,6 @@ export class CSVWRiter {
     });
 
     const csvContent = [headerLine, ...rows].join("\n");
-    console.log(csvContent);
     fs.writeFileSync(filePath, csvContent, "utf8");
   }
 }

@@ -11,7 +11,7 @@ declare type Similarities = {
 }[];
 
 type MovieRecommendation = {
-  movieId: number;
+  movieId: string;
   weightedScore: number;
   similaritySum: number;
 };
@@ -58,7 +58,7 @@ export class UserRecommend {
         // Initialize the mapping on movieScore if it doesn't exist.
         if (!movieScores[raterId]) {
           movieScores[raterId] = {
-            movieId: raterId,
+            movieId: raterId.toString(),
             weightedScore: 0,
             similaritySum: 0,
           };

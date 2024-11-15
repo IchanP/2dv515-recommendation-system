@@ -33,8 +33,6 @@ export class MovieMapper {
       // Convert MovieId to number for comparison
       const middleId = Number(movieArray[middle].MovieId);
 
-      console.log(middleId, numberId);
-
       if (middleId === numberId) {
         return movieArray[middle].Title;
       } else if (middleId < numberId) {
