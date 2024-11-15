@@ -1,7 +1,8 @@
-import path from "node:path";
 import { CSVPrcessor } from "./CSVProcessor";
 import { euclidieanSimilarity, RatingsMap } from "@/util";
 import { UntransformedRatings } from "./MovieTransposer";
+import { getMovies, getRatings } from "./CSVReader";
+import { MovieMapper } from "./MovieMapper";
 
 declare type Similarities = {
   user: string;
@@ -15,14 +16,13 @@ type MovieRecommendation = {
   similaritySum: number;
 };
 
-const publicPath = path.join(process.cwd(), "public");
 export class UserRecommend {
   processor = new CSVPrcessor();
+  movieMapper = new MovieMapper();
+
   async getRecommendations(userId: string, nrOfResults: number) {
     // TODO calculate the similarity between the given userId and all the other users.
-    const ratings = await this.processor.processCsvFile<UntransformedRatings>(
-      publicPath + "/data/ratings.csv",
-    );
+    const ratings = await getRatings();
     const map = this.buildRatingsMap(ratings);
     const similarities = await this.calculateSimilarities(userId, map);
     // This assumes that the array is already sorted in descending order
@@ -31,14 +31,15 @@ export class UserRecommend {
       map,
       similarities,
     ).slice(0, nrOfResults);
-    // TODO map the movie id to a movie name and then return the result.
-    return null;
+    const movies = await getMovies();
+    return this.movieMapper.insertTitleToMovie(recommendations, movies);
   }
 
+  // TODO make this more general and move it to a different class
   private calculateRecommendations(
     userId: string,
     map: RatingsMap,
-    similarities: { user: string; otherUser: string; similarity: number }[],
+    similarities: Similarities,
   ) {
     // Used to filter the movies the user has seen inside teh 2nd loop.
     const targetRatedMovies = new Set(
@@ -67,13 +68,15 @@ export class UserRecommend {
       }
     }
 
-    const recommendations = Object.values(movieScores).map((entry) => ({
-      movieId: entry.movieId,
-      score:
-        entry.similaritySum > 0
-          ? Number((entry.weightedScore / entry.similaritySum).toFixed(4))
-          : 0,
-    }));
+    const recommendations: IdScoreRecommend[] = Object.values(movieScores).map(
+      (entry) => ({
+        movieId: entry.movieId,
+        score:
+          entry.similaritySum > 0
+            ? Number((entry.weightedScore / entry.similaritySum).toFixed(4))
+            : 0,
+      }),
+    );
 
     recommendations.sort((a, b) => b.score - a.score);
     return recommendations;

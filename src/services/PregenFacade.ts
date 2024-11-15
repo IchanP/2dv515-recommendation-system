@@ -3,6 +3,7 @@ import { CSVPrcessor } from "./CSVProcessor";
 import { MovieTransposer, UntransformedRatings } from "./MovieTransposer";
 import { euclidieanSimilarity, RatingsMap } from "@/util";
 import { CSVWRiter } from "./CSVWriter";
+import { getRatings } from "./CSVReader";
 
 export class PregenFacade {
   processor: CSVPrcessor;
@@ -19,10 +20,7 @@ export class PregenFacade {
     // Would have liked to make this more general but not enough time.
     const publicPath = path.join(process.cwd(), "public");
 
-    const userRatings =
-      await this.processor.processCsvFile<UntransformedRatings>(
-        publicPath + "/data/ratings.csv",
-      );
+    const userRatings = await getRatings();
     const transposedRatings = await this.transposer.transpose(userRatings);
     const similarities = this.calculateAllMovieSimilarities(transposedRatings);
     this.CSVWriter.writeCSV(
