@@ -80,6 +80,7 @@ export function calculateMovieRecommendation(
       for (const { rating } of map[itemA]) {
         addScores(movieScores, similarity, rating, itemB);
       }
+      continue;
     }
 
     if (map[itemB]) {

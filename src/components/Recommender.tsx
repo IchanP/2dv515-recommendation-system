@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import FormParagraph from "./FormParagraph";
 import DataTable from "./DataTable";
+import ErrorMessage from "./ErrorMessage";
 
 export declare type User = {
   UserId: number;
@@ -27,11 +28,12 @@ const Recommender = ({ users }: { users: User[] }) => {
   const [recommendations, setRecommendations] = useState<
     Recommendation[] | null
   >(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (results.length === 0) {
-      //TODO Display error
+    if (results.length === 0 || Number(results) < 1) {
+      setErrorMessage("Please input a number bigger than 0.");
       return;
     }
 
@@ -49,8 +51,9 @@ const Recommender = ({ users }: { users: User[] }) => {
       const data = await response.json();
       const foundRecommendations: Recommendation[] = data.data;
       setRecommendations(foundRecommendations);
+      setErrorMessage(null);
     } else {
-      // TODO Set an error message to display
+      setErrorMessage("Something went wrong when fetching the data");
     }
   };
   return (
@@ -99,6 +102,7 @@ const Recommender = ({ users }: { users: User[] }) => {
             <DataTable headers={headers} data={recommendations} />
           )}
         </div>
+        <ErrorMessage text={errorMessage} />
       </div>
     </div>
   );
