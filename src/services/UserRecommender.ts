@@ -13,9 +13,9 @@ export class UserRecommender {
 
   async getRecommendations(userId: string, nrOfResults: number) {
     const ratings = await getRatings();
-    console.log(ratings);
     const map = this.buildRatingsMap(ratings);
     const similarities = await this.calculateSimilarities(userId, map);
+    console.log(similarities);
     // This assumes that the array is already sorted in descending order
     const recommendations = calculateRecommendations(
       userId,
@@ -27,7 +27,7 @@ export class UserRecommender {
   }
 
   private async calculateSimilarities(user: string, map: RatingsMap) {
-    const similarities: Similarities[] = [];
+    const similarities: Similarity[] = [];
 
     for (const otherUser in map) {
       if (otherUser === user) continue;

@@ -19,7 +19,7 @@ export async function getRatings(): Promise<UntransformedRatings[]> {
   );
 }
 export async function getMovieSimilarities() {
-  return reader.processCsvFile<Similarities>(
+  return reader.processCsvFile<Similarity>(
     `${publicPath}/data/transposed/movie-similarities.csv`,
   );
 }

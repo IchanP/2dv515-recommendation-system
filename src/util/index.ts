@@ -46,16 +46,13 @@ export function euclidieanSimilarity(
 export function calculateRecommendations(
   userId: string,
   map: RatingsMap,
-  similarities: Similarities[],
+  similarities: Similarity[],
 ) {
   // Used to filter the movies the user has seen inside the 2nd loop.
   // TODO maybe move this out not sure how it should be used for movies
   const targetRatedMovies = new Set(
     map[userId].map((rating) => rating.raterId),
   );
-
-  console.log(map);
-
   const movieScores: { [key: string]: MovieRecommendation } = {};
 
   for (const { itemB, similarity } of similarities) {

@@ -16,7 +16,7 @@ declare type Movie = {
   Year: number;
 };
 
-declare type Similarities = {
+declare type Similarity = {
   itemA: string;
   itemB: string;
   similarity: number;

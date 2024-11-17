@@ -32,7 +32,7 @@ export class PregenFacade {
   private calculateAllMovieSimilarities(movieRatings: RatingsMap) {
     const movieIds = Object.keys(movieRatings);
     // Turn it into an array of objects for easier handling
-    const similarities: Similarities[] = [];
+    const similarities: Similarity[] = [];
 
     // Quadratic growth since we loop over all the pairings.
     for (let i = 0; i < movieIds.length; i++) {
