@@ -74,12 +74,19 @@ export function calculateMovieRecommendation(
 ) {
   const movieScores: { [key: string]: MovieRecommendation } = {};
   for (const { itemA, itemB, similarity } of similarities) {
-    // Grab the ratings that we'll work on in this loop
-    const otherUserRatings = map[itemA];
-    for (const { rating } of otherUserRatings) {
-      // Initialize the mapping on movieScore if it doesn't exist.
+    // Ensures that we handle cases where the unrated movie is either A or B.
+    if (map[itemA]) {
       initializeMovieScoreKey(movieScores, itemB);
-      addScores(movieScores, similarity, rating, itemB);
+      for (const { rating } of map[itemA]) {
+        addScores(movieScores, similarity, rating, itemB);
+      }
+    }
+
+    if (map[itemB]) {
+      initializeMovieScoreKey(movieScores, itemA);
+      for (const { rating } of map[itemB]) {
+        addScores(movieScores, similarity, rating, itemA);
+      }
     }
   }
   const recommendations: IdScoreRecommend[] = calculateScore(movieScores);

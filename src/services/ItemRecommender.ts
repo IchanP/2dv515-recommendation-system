@@ -32,9 +32,12 @@ export class ItemRecommender {
 
   private filterSimilarities(map: RatingsMap, similarities: Similarity[]) {
     const keySet = new Set(Object.keys(map)); // Gives acces to has function
-    return similarities.filter(
-      (sim) => keySet.has(sim.itemA) && !keySet.has(sim.itemB),
-    );
+    return similarities.filter((sim) => {
+      // Include if exactly one of the movies is rated
+      const aIsRated = keySet.has(sim.itemA);
+      const bIsRated = keySet.has(sim.itemB);
+      return (aIsRated && !bIsRated) || (!aIsRated && bIsRated);
+    });
   }
 
   private convertSimilarityToNumber(similarities: Similarity[]) {
