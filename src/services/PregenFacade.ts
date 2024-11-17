@@ -1,10 +1,6 @@
 import path from "node:path";
 import { CSVPrcessor } from "./CSVProcessor";
-import {
-  buildRatingsMapGeneric,
-  euclidieanSimilarity,
-  RatingsMap,
-} from "@/util";
+import { buildRatingsMap, euclidieanSimilarity, RatingsMap } from "@/util";
 import { CSVWRiter } from "./CSVWriter";
 import { getRatings } from "./CSVReader";
 
@@ -21,7 +17,7 @@ export class PregenFacade {
     const publicPath = path.join(process.cwd(), "public");
 
     const userRatings = await getRatings();
-    const transposedRatings = buildRatingsMapGeneric(
+    const transposedRatings = buildRatingsMap(
       userRatings,
       "MovieId",
       "UserId",

@@ -1,4 +1,4 @@
-import { buildRatingsMapGeneric } from "@/util";
+import { buildRatingsMap, calculateRecommendations, RatingsMap } from "@/util";
 import { getMovieSimilarities, getRatings } from "./CSVReader";
 
 export class ItemRecommender {
@@ -8,14 +8,19 @@ export class ItemRecommender {
     const ourUserRatings = userRatings.filter(
       (rating) => Number(rating.UserId) === userId,
     );
-    // TODO move this transpose function out to a different function and also make it
-    //  more general so i can reuse it in user recommend
-    const map = buildRatingsMapGeneric(
-      ourUserRatings,
-      "MovieId",
-      "UserId",
-      "Rating",
-    );
+    const map = buildRatingsMap(ourUserRatings, "MovieId", "UserId", "Rating");
+    // Filter out the unseen movies from the comparison as they're uninteresting.
+    const filtered = this.filterSimilarities(map, movieSimilarities);
     console.log(map);
+    console.log(filtered);
+    /*     const recommendations = calculateRecommendations("0", map, filtered);
+     */
+  }
+
+  private filterSimilarities(map: RatingsMap, similarities: Similarity[]) {
+    const keySet = new Set(Object.keys(map)); // Gives acces to has function
+    return similarities.filter(
+      (sim) => keySet.has(sim.itemA) && !keySet.has(sim.itemB),
+    );
   }
 }

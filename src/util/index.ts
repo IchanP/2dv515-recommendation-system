@@ -53,12 +53,12 @@ export function calculateRecommendations(
   const targetRatedMovies = new Set(
     map[userId].map((rating) => rating.raterId),
   );
-  const movieScores: { [key: string]: MovieRecommendation } = {};
 
+  const movieScores: { [key: string]: MovieRecommendation } = {};
+  console.log(similarities);
   for (const { itemB, similarity } of similarities) {
     // Grab the ratings that we'll work on in this loop
     const otherUserRatings = map[itemB];
-
     for (const { raterId, rating } of otherUserRatings) {
       if (targetRatedMovies.has(raterId)) continue;
 
@@ -89,7 +89,7 @@ export function calculateRecommendations(
   return recommendations;
 }
 
-export function buildRatingsMapGeneric<T extends keyof UntransformedRatings>(
+export function buildRatingsMap<T extends keyof UntransformedRatings>(
   ratings: UntransformedRatings[],
   groupByKey: T,
   raterKey: keyof UntransformedRatings,
