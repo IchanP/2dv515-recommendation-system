@@ -4,6 +4,12 @@ export type RatingsMap = {
   [entityId: string]: RatingEntry[];
 };
 
+type MovieRecommendation = {
+  movieId: string;
+  weightedScore: number;
+  similaritySum: number;
+};
+
 export function euclidieanSimilarity(
   itemAId: string,
   itemBId: string,
@@ -35,4 +41,53 @@ export function euclidieanSimilarity(
   }
 
   return (1 / (1 + similarity)).toFixed(4);
+}
+
+export function calculateRecommendations(
+  userId: string,
+  map: RatingsMap,
+  similarities: Similarities[],
+) {
+  // Used to filter the movies the user has seen inside the 2nd loop.
+  // TODO maybe move this out not sure how it should be used for movies
+  const targetRatedMovies = new Set(
+    map[userId].map((rating) => rating.raterId),
+  );
+
+  console.log(map);
+
+  const movieScores: { [key: string]: MovieRecommendation } = {};
+
+  for (const { itemB, similarity } of similarities) {
+    // Grab the ratings that we'll work on in this loop
+    const otherUserRatings = map[itemB];
+
+    for (const { raterId, rating } of otherUserRatings) {
+      if (targetRatedMovies.has(raterId)) continue;
+
+      // Initialize the mapping on movieScore if it doesn't exist.
+      if (!movieScores[raterId]) {
+        movieScores[raterId] = {
+          movieId: raterId.toString(),
+          weightedScore: 0,
+          similaritySum: 0,
+        };
+      }
+      movieScores[raterId].weightedScore += similarity * rating;
+      movieScores[raterId].similaritySum += similarity;
+    }
+  }
+
+  const recommendations: IdScoreRecommend[] = Object.values(movieScores).map(
+    (entry) => ({
+      movieId: entry.movieId,
+      score:
+        entry.similaritySum > 0
+          ? Number((entry.weightedScore / entry.similaritySum).toFixed(4))
+          : 0,
+    }),
+  );
+
+  recommendations.sort((a, b) => b.score - a.score);
+  return recommendations;
 }

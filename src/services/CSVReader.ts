@@ -1,13 +1,6 @@
 import { User } from "@/components/Recommender";
 import { CSVPrcessor } from "./CSVProcessor";
 import path from "node:path";
-import { UntransformedRatings } from "./MovieTransposer";
-
-export declare type Movie = {
-  MoviedId: string;
-  Title: string;
-  Year: number;
-};
 
 const reader = new CSVPrcessor();
 const publicPath = path.join(process.cwd(), "public");
@@ -23,5 +16,10 @@ export async function getMovies(): Promise<Movie[]> {
 export async function getRatings(): Promise<UntransformedRatings[]> {
   return reader.processCsvFile<UntransformedRatings>(
     `${publicPath}/data/ratings.csv`,
+  );
+}
+export async function getMovieSimilarities() {
+  return reader.processCsvFile<Similarities>(
+    `${publicPath}/data/transposed/movie-similarities.csv`,
   );
 }

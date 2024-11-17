@@ -1,6 +1,6 @@
 import path from "node:path";
 import { CSVPrcessor } from "./CSVProcessor";
-import { MovieTransposer, UntransformedRatings } from "./MovieTransposer";
+import { MovieTransposer } from "./MovieTransposer";
 import { euclidieanSimilarity, RatingsMap } from "@/util";
 import { CSVWRiter } from "./CSVWriter";
 import { getRatings } from "./CSVReader";
@@ -9,7 +9,6 @@ export class PregenFacade {
   processor: CSVPrcessor;
   transposer: MovieTransposer;
   CSVWriter: CSVWRiter;
-  // TODO - To generalize this a bit we could pass the transposer and writer as arguments and accept interfaces rather than creating them here.
   constructor() {
     this.processor = new CSVPrcessor();
     this.transposer = new MovieTransposer();
@@ -33,11 +32,7 @@ export class PregenFacade {
   private calculateAllMovieSimilarities(movieRatings: RatingsMap) {
     const movieIds = Object.keys(movieRatings);
     // Turn it into an array of objects for easier handling
-    const similarities: {
-      movieA: string;
-      movieB: string;
-      similarity: string | number;
-    }[] = [];
+    const similarities: Similarities[] = [];
 
     // Quadratic growth since we loop over all the pairings.
     for (let i = 0; i < movieIds.length; i++) {
@@ -50,9 +45,9 @@ export class PregenFacade {
           movieRatings,
         );
         similarities.push({
-          movieA: movieAId,
-          movieB: movieBId,
-          similarity: similarityScore,
+          itemA: movieAId,
+          itemB: movieBId,
+          similarity: Number(similarityScore),
         });
       }
     }

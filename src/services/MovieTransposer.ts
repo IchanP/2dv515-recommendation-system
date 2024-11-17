@@ -1,11 +1,5 @@
 import { RatingsMap } from "@/util";
 
-export type UntransformedRatings = {
-  UserId: number;
-  MovieId: number;
-  Rating: number;
-};
-
 /**
  * Transposes the dataset from the data located under /public/data into a
  */

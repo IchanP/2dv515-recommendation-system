@@ -1,8 +1,18 @@
+import { ItemRecommender } from "@/services/ItemRecommender";
+import { recommendApiParamsValidation } from "@/util/validators";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    return NextResponse.json({ message: "fetched data" }, { status: 200 });
+    const { user, nrOfResults } = recommendApiParamsValidation(request.url);
+
+    const recommender = new ItemRecommender();
+    const recommendations = await recommender.getRecommendations(
+      user,
+      Number(nrOfResults),
+    );
+
+    return NextResponse.json({ data: "lol" }, { status: 200 });
   } catch (e: unknown) {
     console.log(e); // Should go to logger really but whatever for this assignment
     return NextResponse.json(

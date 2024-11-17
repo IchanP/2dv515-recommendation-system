@@ -1,16 +1,12 @@
-import { UserRecommend } from "@/services/UserRecommend";
+import { UserRecommender } from "@/services/UserRecommender";
+import { recommendApiParamsValidation } from "@/util/validators";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const user = searchParams.get("user");
-    const nrOfResults = searchParams.get("results");
+    const { user, nrOfResults } = recommendApiParamsValidation(request.url);
 
-    if (!user || !nrOfResults || !Number(user) || !Number(nrOfResults))
-      throw new Error();
-
-    const recommender = new UserRecommend();
+    const recommender = new UserRecommender();
     const recommendations = await recommender.getRecommendations(
       user,
       Number(nrOfResults),

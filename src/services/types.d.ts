@@ -15,3 +15,15 @@ declare type Movie = {
   Title: string;
   Year: number;
 };
+
+declare type Similarities = {
+  itemA: string;
+  itemB: string;
+  similarity: number;
+};
+
+type UntransformedRatings = {
+  UserId: number;
+  MovieId: number;
+  Rating: number;
+};
