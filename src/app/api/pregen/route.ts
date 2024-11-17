@@ -15,10 +15,12 @@ export async function POST() {
 
     await generator.generateTable();
 
-    // TODO Add in file path
-    return NextResponse.json({
-      message: "Data transposed to TODO add file path",
-    });
+    return NextResponse.json(
+      {
+        message: "Data saved to 'movie-similarities.csv",
+      },
+      { status: 200 },
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {

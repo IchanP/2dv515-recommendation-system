@@ -48,8 +48,7 @@ const Recommender = ({ users }: { users: User[] }) => {
     if (response.ok) {
       const data = await response.json();
       const foundRecommendations: Recommendation[] = data.data;
-      /*       setRecommendations(foundRecommendations);
-       */
+      setRecommendations(foundRecommendations);
     } else {
       // TODO Set an error message to display
     }

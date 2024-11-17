@@ -1,7 +1,7 @@
 import { CSVPrcessor } from "./CSVProcessor";
 import {
   buildRatingsMap,
-  calculateRecommendations,
+  calculateUserRecommendation,
   euclidieanSimilarity,
   RatingsMap,
 } from "@/util";
@@ -17,7 +17,7 @@ export class UserRecommender {
     const map = buildRatingsMap(ratings, "UserId", "MovieId", "Rating");
     const similarities = await this.calculateSimilarities(userId, map);
     // This assumes that the array is already sorted in descending order
-    const recommendations = calculateRecommendations(
+    const recommendations = calculateUserRecommendation(
       userId,
       map,
       similarities,

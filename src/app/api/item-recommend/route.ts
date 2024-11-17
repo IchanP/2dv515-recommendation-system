@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       Number(nrOfResults),
     );
 
-    return NextResponse.json({ data: "lol" }, { status: 200 });
+    return NextResponse.json({ data: recommendations }, { status: 200 });
   } catch (e: unknown) {
     console.log(e); // Should go to logger really but whatever for this assignment
     return NextResponse.json(
