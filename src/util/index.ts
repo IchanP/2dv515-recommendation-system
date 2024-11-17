@@ -88,3 +88,25 @@ export function calculateRecommendations(
   recommendations.sort((a, b) => b.score - a.score);
   return recommendations;
 }
+
+export function buildRatingsMapGeneric<T extends keyof UntransformedRatings>(
+  ratings: UntransformedRatings[],
+  groupByKey: T,
+  raterKey: keyof UntransformedRatings,
+  ratingKey: keyof UntransformedRatings,
+) {
+  const groupedRatings: RatingsMap = {};
+
+  for (const rating of ratings) {
+    const groupId = rating[groupByKey];
+    if (!groupedRatings[groupId]) {
+      groupedRatings[groupId] = [];
+    }
+    groupedRatings[groupId].push({
+      raterId: Number(rating[raterKey]),
+      rating: Number(rating[ratingKey]),
+    });
+  }
+
+  return groupedRatings;
+}

@@ -1,17 +1,18 @@
 import path from "node:path";
 import { CSVPrcessor } from "./CSVProcessor";
-import { MovieTransposer } from "./MovieTransposer";
-import { euclidieanSimilarity, RatingsMap } from "@/util";
+import {
+  buildRatingsMapGeneric,
+  euclidieanSimilarity,
+  RatingsMap,
+} from "@/util";
 import { CSVWRiter } from "./CSVWriter";
 import { getRatings } from "./CSVReader";
 
 export class PregenFacade {
   processor: CSVPrcessor;
-  transposer: MovieTransposer;
   CSVWriter: CSVWRiter;
   constructor() {
     this.processor = new CSVPrcessor();
-    this.transposer = new MovieTransposer();
     this.CSVWriter = new CSVWRiter();
   }
 
@@ -20,7 +21,12 @@ export class PregenFacade {
     const publicPath = path.join(process.cwd(), "public");
 
     const userRatings = await getRatings();
-    const transposedRatings = await this.transposer.transpose(userRatings);
+    const transposedRatings = buildRatingsMapGeneric(
+      userRatings,
+      "MovieId",
+      "UserId",
+      "Rating",
+    );
     const similarities = this.calculateAllMovieSimilarities(transposedRatings);
     this.CSVWriter.writeCSV(
       similarities,

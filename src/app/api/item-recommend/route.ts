@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     const recommender = new ItemRecommender();
     const recommendations = await recommender.getRecommendations(
-      user,
+      Number(user),
       Number(nrOfResults),
     );
 

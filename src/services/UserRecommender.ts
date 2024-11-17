@@ -1,5 +1,6 @@
 import { CSVPrcessor } from "./CSVProcessor";
 import {
+  buildRatingsMapGeneric,
   calculateRecommendations,
   euclidieanSimilarity,
   RatingsMap,
@@ -13,9 +14,8 @@ export class UserRecommender {
 
   async getRecommendations(userId: string, nrOfResults: number) {
     const ratings = await getRatings();
-    const map = this.buildRatingsMap(ratings);
+    const map = buildRatingsMapGeneric(ratings, "UserId", "MovieId", "Rating");
     const similarities = await this.calculateSimilarities(userId, map);
-    console.log(similarities);
     // This assumes that the array is already sorted in descending order
     const recommendations = calculateRecommendations(
       userId,
@@ -43,22 +43,5 @@ export class UserRecommender {
     return similarities.filter((e) => {
       return e.similarity > 0;
     });
-  }
-
-  // This is the exact same as in MovieTransposer
-  // but I didn't have time to spend to generalize it for both use cases.
-  private buildRatingsMap(ratings: UntransformedRatings[]) {
-    const userRatings: RatingsMap = {};
-    for (const rating of ratings) {
-      const userId = rating.UserId;
-      if (!userRatings[userId]) {
-        userRatings[userId] = [];
-      }
-      userRatings[userId].push({
-        raterId: rating.MovieId,
-        rating: rating.Rating,
-      });
-    }
-    return userRatings;
   }
 }

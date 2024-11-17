@@ -23,7 +23,7 @@ declare type Similarity = {
 };
 
 type UntransformedRatings = {
-  UserId: number;
+  UserId: string;
   MovieId: number;
   Rating: number;
 };
