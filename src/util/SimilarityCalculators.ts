@@ -41,13 +41,14 @@ export function pearsonSimilarity(
   let sumOneSq = 0;
   let sumTwoSq = 0;
   let pSum = 0;
-
   let matching = 0;
+
   const entityA = ratingsMap[itemAId];
   const entityB = ratingsMap[itemBId];
   const entityARatingsMap = new Map(
     entityA.map((entry) => [entry.raterId, entry.rating]),
   );
+
   for (const ratingB of entityB) {
     if (entityARatingsMap.has(ratingB.raterId)) {
       const ratingA = Number(entityARatingsMap.get(ratingB.raterId));
@@ -62,6 +63,7 @@ export function pearsonSimilarity(
   if (matching == 0) {
     return 0;
   }
+
   const num = pSum - (sumOne * sumTwo) / matching;
   const den = Math.sqrt(
     (sumOneSq - sumOne ** 2 / matching) * (sumTwoSq - sumTwo ** 2 / matching),

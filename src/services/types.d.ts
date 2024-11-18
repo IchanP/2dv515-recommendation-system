@@ -1,4 +1,3 @@
-// TODO move several types here to avoid interdependencies
 declare type IdScoreRecommend = {
   movieId: string;
   score: number;

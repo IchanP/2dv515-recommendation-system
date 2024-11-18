@@ -43,8 +43,7 @@ export class UserRecommender {
       const similarity = isEuclideanType(this.simType)
         ? euclidieanSimilarity(this.userId, otherUser, map)
         : pearsonSimilarity(this.userId, otherUser, map);
-      // TODO pearson returns a negative number, look into why.
-      console.log(similarity);
+
       similarities.push({
         itemA: this.userId,
         itemB: otherUser,
