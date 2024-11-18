@@ -1,14 +1,25 @@
 import { UserRecommender } from "@/services/UserRecommender";
-import { recommendApiParamsValidation } from "@/util/validators";
+import {
+  recommendApiParamsValidation,
+  simTypeParamValidation,
+} from "@/util/validators";
 import { NextRequest, NextResponse } from "next/server";
+
+const acceptableSimTypes: AcceptableUserRecommendTypes = {
+  pearson: "Pearson",
+  euclidean: "Euclidean",
+};
 
 export async function GET(request: NextRequest) {
   try {
     const { user, nrOfResults } = recommendApiParamsValidation(request.url);
+    const simType = simTypeParamValidation(
+      request.url,
+      acceptableSimTypes,
+    ) as unknown as AcceptableUserRecommendTypes; // Did it this way to keep the simTypeParamValdiation function general
 
-    const recommender = new UserRecommender();
+    const recommender = new UserRecommender(user, simType);
     const recommendations = await recommender.getRecommendations(
-      user,
       Number(nrOfResults),
     );
     return NextResponse.json({ data: recommendations }, { status: 200 });

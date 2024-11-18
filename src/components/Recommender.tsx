@@ -39,6 +39,12 @@ const Recommender = ({ users }: { users: User[] }) => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  /**
+   * Constructs the search parameters and URL and sends a request for recommendations.
+   *
+   * @param e - The event that triggered the submission.
+   * @returns - Undefined.
+   */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Ensure user input is correct
@@ -46,6 +52,7 @@ const Recommender = ({ users }: { users: User[] }) => {
       setErrorMessage("Please input a number bigger than 0.");
       return;
     }
+    console.log(reccType, simType);
     if (
       reccType === recommendationTypes.itemBased &&
       simType === simTypes.pearson
@@ -63,7 +70,7 @@ const Recommender = ({ users }: { users: User[] }) => {
     const params = new URLSearchParams({
       user: selectedUser,
       results: results,
-      simType: simType,
+      simtype: simType,
     }).toString();
 
     const response = await fetch(`${endpoint}?${params}`);
@@ -99,8 +106,8 @@ const Recommender = ({ users }: { users: User[] }) => {
 
             <FormParagraph text="Similarity" />
             <Selector<simType> setState={setSimType}>
-              <option value={recommendationTypes.itemBased}>Euclidean</option>
-              <option value={recommendationTypes.userBased}>Pearson</option>
+              <option value={simTypes.euclidean}>Euclidean</option>
+              <option value={simTypes.pearson}>Pearson</option>
             </Selector>
 
             <FormParagraph text="Results: " />
@@ -111,6 +118,7 @@ const Recommender = ({ users }: { users: User[] }) => {
               onChange={(e) => setResults(e.target.value)}
             ></input>
           </div>
+
           <button
             className="mt-2 bg-lightSecondary dark:bg-darkSecondary px-2 py-1 rounded-md hover:bg-lightHover hover:dark:bg-darkHover"
             type="submit"
@@ -118,12 +126,13 @@ const Recommender = ({ users }: { users: User[] }) => {
             Submit
           </button>
         </form>
+
+        <ErrorMessage text={errorMessage} />
         <div className="flex flex-col items-center mt-5">
           {recommendations !== null && (
             <DataTable headers={headers} data={recommendations} />
           )}
         </div>
-        <ErrorMessage text={errorMessage} />
       </div>
     </div>
   );

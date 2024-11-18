@@ -27,3 +27,8 @@ type UntransformedRatings = {
   MovieId: number;
   Rating: number;
 };
+
+type AcceptableUserRecommendTypes = {
+  pearson: "Pearson";
+  euclidean: "Euclidean";
+};
