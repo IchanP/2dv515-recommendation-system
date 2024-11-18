@@ -1,8 +1,4 @@
-import {
-  buildRatingsMap,
-  calculateMovieRecommendation,
-  RatingsMap,
-} from "@/util";
+import { buildRatingsMap, calculateMovieRecommendation } from "@/util";
 import { getMovies, getMovieSimilarities, getRatings } from "./CSVReader";
 import { MovieMapper } from "./MovieMapper";
 
@@ -31,7 +27,7 @@ export class ItemRecommender {
   }
 
   private filterSimilarities(map: RatingsMap, similarities: Similarity[]) {
-    const keySet = new Set(Object.keys(map)); // Gives acces to has function
+    const keySet = new Set(Object.keys(map));
     return similarities.filter((sim) => {
       // Include if exactly one of the movies is rated
       const aIsRated = keySet.has(sim.itemA);

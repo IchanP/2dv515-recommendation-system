@@ -5,7 +5,7 @@ import {
 } from "@/util/validators";
 import { NextRequest, NextResponse } from "next/server";
 
-const acceptableSimTypes: AcceptableUserRecommendTypes = {
+const acceptableSimTypes = {
   pearson: "Pearson",
   euclidean: "Euclidean",
 };
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const simType = simTypeParamValidation(
       request.url,
       acceptableSimTypes,
-    ) as unknown as AcceptableUserRecommendTypes; // Did it this way to keep the simTypeParamValdiation function general
+    ) as AcceptableUserRecommendTypes; // Did it this way to keep the simTypeParamValdiation function general
 
     const recommender = new UserRecommender(user, simType);
     const recommendations = await recommender.getRecommendations(

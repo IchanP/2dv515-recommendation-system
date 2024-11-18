@@ -1,6 +1,7 @@
 import path from "node:path";
 import { CSVPrcessor } from "./CSVProcessor";
-import { buildRatingsMap, euclidieanSimilarity, RatingsMap } from "@/util";
+import { buildRatingsMap } from "@/util";
+import { euclidieanSimilarity } from "@/util/SimilarityCalculators";
 import { CSVWRiter } from "./CSVWriter";
 import { getRatings } from "./CSVReader";
 

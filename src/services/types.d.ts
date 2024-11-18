@@ -28,7 +28,10 @@ type UntransformedRatings = {
   Rating: number;
 };
 
-type AcceptableUserRecommendTypes = {
-  pearson: "Pearson";
-  euclidean: "Euclidean";
+type AcceptableUserRecommendTypes = "Pearson" | "Euclidean";
+
+type RatingEntry = { raterId: number; rating: number };
+
+type RatingsMap = {
+  [entityId: string]: RatingEntry[];
 };

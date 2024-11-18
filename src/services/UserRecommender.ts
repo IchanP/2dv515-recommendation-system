@@ -1,12 +1,12 @@
 import { CSVPrcessor } from "./CSVProcessor";
+import { buildRatingsMap, calculateUserRecommendation } from "@/util";
 import {
-  buildRatingsMap,
-  calculateUserRecommendation,
   euclidieanSimilarity,
-  RatingsMap,
-} from "@/util";
+  pearsonSimilarity,
+} from "@/util/SimilarityCalculators";
 import { getMovies, getRatings } from "./CSVReader";
 import { MovieMapper } from "./MovieMapper";
+import { isEuclideanType } from "@/util/TypeGuards";
 
 export class UserRecommender {
   processor = new CSVPrcessor();
@@ -39,9 +39,12 @@ export class UserRecommender {
 
     for (const otherUser in map) {
       if (otherUser === this.userId) continue;
-      // TODO this needs to either do euclidean or pearson depedning on the simType value
-      const similarity = euclidieanSimilarity(this.userId, otherUser, map);
 
+      const similarity = isEuclideanType(this.simType)
+        ? euclidieanSimilarity(this.userId, otherUser, map)
+        : pearsonSimilarity(this.userId, otherUser, map);
+      // TODO pearson returns a negative number, look into why.
+      console.log(similarity);
       similarities.push({
         itemA: this.userId,
         itemB: otherUser,
